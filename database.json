@@ -1,11 +1,17 @@
 {
     "dev": {
         "driver": "pg",
-        "filename": "~/dev.db"
+        "host": "127.0.0.1",
+        "database": "market",
+        "user": "miro",
+        "password": "password"
     },
     "test": {
         "driver": "pg",
-        "filename": ":memory:"
+        "host": "127.0.0.1",
+        "database": "market_test",
+        "user": "miro",
+        "password": "password"
     },
     "prod": {
         "driver": "pg",
