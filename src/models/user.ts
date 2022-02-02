@@ -1,7 +1,7 @@
 import { Connection } from 'pg';
 import Client from '../database';
 
-export type user = {
+export type UserType = {
     id: Number;
     name: String;
     password: String;
@@ -9,7 +9,7 @@ export type user = {
 }
 
 export class User {
-    async index(): Promise<user[]> {
+    async index(): Promise<UserType[]> {
         try {
             const con = await Client.connect();
             const sql = 'SELECT * FROM users';

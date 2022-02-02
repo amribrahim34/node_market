@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.ts",
     "watch": "tsc-watch --esModuleInterop src/serer.ts --outDir ./dist ",
-    "test": "jasmine-ts",
+    "test": "db-migrate --env test up && jasmine-ts && db-migrate db:drop --env test",
     "tsc": "tsc"
   },
   "repository": {
