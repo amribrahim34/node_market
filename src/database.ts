@@ -9,12 +9,12 @@ const {
     POSTGRES_USER,
     POSTGRES_PASSWORD,
     POSTGRES_TEST_DB,
-    APP_ENV
+    ENV
 } = process.env
 
 let Client: Pool;
 
-if (APP_ENV == 'testing') {
+if (ENV == 'testing') {
     Client = new Pool({
         host: POSTGRES_HOST,
         database: POSTGRES_TEST_DB,
