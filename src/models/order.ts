@@ -1,24 +1,23 @@
 import { Connection } from 'pg';
 import Client from '../database';
 
-export type ProductType = {
+export type OrderType = {
     id: Number;
-    name: String;
-    details: String;
-    price: Number;
-    category_id: Number;
+    user_id: Number;
+    quantoty: Number;
+    products: Number;
 }
 
-export class Product {
-    async index(): Promise<ProductType[]> {
+export class Order {
+    async index(): Promise<OrderType[]> {
         try {
             const con = await Client.connect();
-            const sql = 'SELECT * FROM products';
+            const sql = 'SELECT * FROM orders';
             const result = await con.query(sql);
             con.release();
             return result.rows;
         } catch (error) {
-            throw new Error(`cannot get products ${error}`);
+            throw new Error(`cannot get orders ${error}`);
         }
     }
 }
