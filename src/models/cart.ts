@@ -8,15 +8,15 @@ export type CartType = {
 }
 
 export class Cart {
-    async index(): Promise<CartType[]> {
-        try {
-            const con = await Client.connect();
-            const sql = 'SELECT * FROM carts';
-            const result = await con.query(sql);
-            con.release();
-            return result.rows;
-        } catch (error) {
-            throw new Error(`cannot get carts ${error}`);
-        }
+  async index(): Promise<CartType[]> {
+    try {
+      const con = await Client.connect();
+      const sql = 'SELECT * FROM carts';
+      const result = await con.query(sql);
+      con.release();
+      return result.rows;
+    } catch (error) {
+      throw new Error(`cannot get carts ${error}`);
     }
+  }
 }

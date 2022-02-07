@@ -10,15 +10,15 @@ export type ProductType = {
 }
 
 export class Product {
-    async index(): Promise<ProductType[]> {
-        try {
-            const con = await Client.connect();
-            const sql = 'SELECT * FROM products';
-            const result = await con.query(sql);
-            con.release();
-            return result.rows;
-        } catch (error) {
-            throw new Error(`cannot get products ${error}`);
-        }
+  async index(): Promise<ProductType[]> {
+    try {
+      const con = await Client.connect();
+      const sql = 'SELECT * FROM products';
+      const result = await con.query(sql);
+      con.release();
+      return result.rows;
+    } catch (error) {
+      throw new Error(`cannot get products ${error}`);
     }
+  }
 }
