@@ -1,18 +1,48 @@
 import { Category, CategoryType } from '../src/models/category';
 
-const cat = new Category();
 describe('Category Model', () => {
-  it('should have index method', () => {
-    expect(cat.index).toBeDefined;
+  it('should have create method', () => {
+    expect(Category.create).toBeDefined;
   });
 
   it('create method should insert a category', async () => {
-    const result = await cat.create('cat1');
-    expect(result.name).toEqual('cat1');
+    const name = 'category_test';
+    const result = await Category.create(name);
+    expect(result[0].name).toEqual(name);
+  });
+
+  it('should have index method', () => {
+    expect(Category.index).toBeDefined;
   });
 
   it('index method should return a list of categories', async () => {
-    const result = await cat.index();
-    expect(result).toEqual([]);
+    const result = await Category.index();
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it('should have update method', () => {
+    expect(Category.update).toBeDefined;
+  });
+
+  it('update method should insert a category', async () => {
+    const name :string = 'category_test';
+    const cat : CategoryType = {
+      id:1,
+      name: name
+    }
+    const result = await Category.update(cat);
+    expect(result[0].name).toEqual(name);
+  });
+
+  it('should have delete method', () => {
+    expect(Category.delete).toBeDefined;
+  });
+
+  it('delete method should delete a category', async () => {
+    const name :string = 'category_test';
+    const msg :string= 'row was deleted successfully';
+    let cat = await Category.create(name);
+    const result = await Category.delete(cat[0].id);
+    expect(result).toEqual(msg);
   });
 });

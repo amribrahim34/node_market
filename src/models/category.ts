@@ -17,7 +17,6 @@ class Category {
       const con = await Client.connect();
       const sql = 'SELECT * FROM categories';
       const result = await con.query(sql);
-      console.log(result);
       con.release();
       return result.rows;
     } catch (error) {

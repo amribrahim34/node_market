@@ -23,7 +23,8 @@ categories.get('/', (req: express.Request, res: express.Response): void => {
  * @return Category
  */
 categories.post('/create', (req: express.Request, res: express.Response): void => {
-  Category.create('cat1').then((result)=>{
+  let name: string = String(req.query.name);
+  Category.create(name).then((result)=>{
     res.json(result);
   }).catch((error) => {
     res.send(error);
