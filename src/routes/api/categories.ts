@@ -30,6 +30,39 @@ categories.post('/create', (req: express.Request, res: express.Response): void =
   });
 });
 
+/**
+ * methode to update category in the database 
+ * @method PUT
+ * @param [Name , Id]
+ * @return Category
+ */
+ categories.put('/update', (req: express.Request, res: express.Response): void => {
+    const id: number = Number(req.query.id);
+    const name: string = String(req.query.name);
+    const cat: CategoryType = {
+        id:id,
+        name:name
+    }
+    Category.update(cat).then((result)=>{
+        res.json(result);
+    }).catch((error) => {
+    res.send(error);
+  });
+});
 
+  /**
+ * methode to delete category from the database 
+ * @method delete
+ * @param Id
+ * @return message
+ */
+ categories.delete('/delete', (req: express.Request, res: express.Response): void => {
+  const id: number = Number(req.query.id);
+  Category.delete(id).then((result)=>{
+    res.json(result);
+  }).catch((error) => {
+    res.send(error);
+  });
+})
 
 export default categories;
