@@ -27,9 +27,9 @@ describe('Category Model', () => {
   it('update method should insert a category', async () => {
     const name :string = 'category_test';
     const cat : CategoryType = {
-      id:1,
-      name: name
-    }
+      id: 1,
+      name,
+    };
     const result = await Category.update(cat);
     expect(result[0].name).toEqual(name);
   });
@@ -40,8 +40,8 @@ describe('Category Model', () => {
 
   it('delete method should delete a category', async () => {
     const name :string = 'category_test';
-    const msg :string= 'row was deleted successfully';
-    let cat = await Category.create(name);
+    const msg :string = 'row was deleted successfully';
+    const cat = await Category.create(name);
     const result = await Category.delete(cat[0].id);
     expect(result).toEqual(msg);
   });

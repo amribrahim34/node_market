@@ -2,10 +2,10 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 export type CartType = {
-    id: Number;
-    user_id: Number;
-    product_id: Number;
-}
+  id: Number;
+  user_id: Number;
+  product_id: Number;
+};
 
 export class Cart {
   async index(): Promise<CartType[]> {

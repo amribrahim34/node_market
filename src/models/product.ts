@@ -2,12 +2,12 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 export type ProductType = {
-    id: Number;
-    name: String;
-    details: String;
-    price: Number;
-    category_id: Number;
-}
+  id: Number;
+  name: String;
+  details: String;
+  price: Number;
+  category_id: Number;
+};
 
 export class Product {
   async index(): Promise<ProductType[]> {

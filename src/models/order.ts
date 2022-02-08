@@ -2,11 +2,11 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 export type OrderType = {
-    id: Number;
-    user_id: Number;
-    quantoty: Number;
-    products: Number;
-}
+  id: Number;
+  user_id: Number;
+  quantoty: Number;
+  products: Number;
+};
 
 export class Order {
   async index(): Promise<OrderType[]> {

@@ -2,11 +2,11 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 export type UserType = {
-    id: Number;
-    name: String;
-    password: String;
-    email: String;
-}
+  id: Number;
+  name: String;
+  password: String;
+  email: String;
+};
 
 export class User {
   async index(): Promise<UserType[]> {
