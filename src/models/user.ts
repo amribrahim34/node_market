@@ -2,6 +2,7 @@ import { Connection } from 'pg';
 import Client from '../database';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import { CartType } from './cart';
 
 
 type UserType = {
@@ -16,6 +17,7 @@ dotenv.config();
 const {
   SALT_ROUNDS,
   ENV,
+  BCRYPT_PASSWORD,
 } = process.env;
 
 class UserModel {
@@ -46,7 +48,7 @@ class UserModel {
     try {
       const con = await Client.connect();
       const salt = bcrypt.genSaltSync(Number(SALT_ROUNDS));
-      const hash = bcrypt.hashSync(String(user.password), salt);
+      const hash = bcrypt.hashSync(String(user.password) + BCRYPT_PASSWORD, salt);
       const sql = `INSERT INTO users (name , password , email) VALUES ($1 , $2 ,$3)`;
       const result = await con.query(sql,  [user.name, hash  , user.email]);
       con.release();
@@ -88,6 +90,57 @@ class UserModel {
       return 'row was deleted successfully';
     } catch (error) {
       throw new Error(`cannot get categories ${error}`);
+    }
+  }
+
+  /**
+   * method to get cart of the user from the database
+   * @param Id
+   * @return message
+   */
+   async cart(id: number): Promise<CartType[]> {
+    try {
+      const con = await Client.connect();
+      const sql = 'SELECT * FROM carts WHERE user_id=$1';
+      const result = await con.query(sql, [id]);
+      con.release();
+      return result.rows;
+    } catch (error) {
+      throw new Error(`cannot get cart ${error}`);
+    }
+  }
+
+  /**
+   * method to get products of the user from the database
+   * @param Id
+   * @return Products
+   */
+   async products(id: number): Promise<CartType[]> {
+    try {
+      const con = await Client.connect();
+      const sql = 'SELECT * FROM products WHERE user_id=$1';
+      const result = await con.query(sql, [id]);
+      con.release();
+      return result.rows;
+    } catch (error) {
+      throw new Error(`cannot get cart ${error}`);
+    }
+  }
+
+  /**
+   * method to get ordered products of the user from the database
+   * @param Id
+   * @return Products
+   */
+   async orders(id: number): Promise<CartType[]> {
+    try {
+      const con = await Client.connect();
+      const sql = 'SELECT * FROM orders WHERE user_id=$1';
+      const result = await con.query(sql, [id]);
+      con.release();
+      return result.rows;
+    } catch (error) {
+      throw new Error(`cannot get cart ${error}`);
     }
   }
 }
