@@ -1,13 +1,13 @@
-import { User, UserType } from '../src/models/user';
+import { UserModel, UserType } from '../src/models/user';
 
-const person = new User();
+// const person = new UserModel();
 describe('User Model', () => {
   it('should have index method', () => {
-    expect(person.index).toBeDefined;
+    expect(UserModel.index).toBeDefined;
   });
 
   it('index method should return a list of users', async () => {
-    const result = await person.index();
+    const result = await UserModel.index();
     expect(result).toEqual([]);
   });
 });

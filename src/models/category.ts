@@ -2,8 +2,8 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 type CategoryType = {
-  id?: Number;
-  name: String;
+  id?: number;
+  name: string;
 };
 
 class Category {
@@ -29,12 +29,13 @@ class Category {
    * @param Name
    * @returns Category
    */
-  static async create(n: string): Promise<any> {
+  static async create(n: string): Promise<CategoryType[]> {
     try {
       const con = await Client.connect();
       const sql = 'INSERT INTO categories (name) VALUES($1) RETURNING *';
       const result = await con.query(sql, [n]);
       con.release();
+      console.log(result.rows[0].name);
       return result.rows;
     } catch (error) {
       throw new Error(`cannot get categories ${error}`);
@@ -63,7 +64,7 @@ class Category {
    * @param Id
    * @return message
    */
-  static async delete(id: number): Promise<any> {
+  static async delete(id: number): Promise<string> {
     try {
       const con = await Client.connect();
       const sql = 'DELETE FROM categories WHERE id=$1';
