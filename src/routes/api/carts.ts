@@ -1,8 +1,12 @@
 import express from 'express';
 import { CartModel, CartType } from '../../models/cart';
+import bodyParser from 'body-parser';
 
 
+// const jsonParser = bodyParser.json()
 const carts = express.Router();
+carts.use(bodyParser.urlencoded({ extended: false }));
+carts.use(bodyParser.json());
 
 
 /**
@@ -28,10 +32,13 @@ const carts = express.Router();
    */
   carts.post(
     '/create',
+    // jsonParser,
     (req: express.Request, res: express.Response): void => {
-      const cartArray :any= req.query.carts;
+      const cartArray = req.body;
+      console.log(cartArray);
       CartModel.create(cartArray)
         .then((result) => {
+          console.log('done');
           res.json(result);
         })
         .catch((error) => {
@@ -49,15 +56,8 @@ const carts = express.Router();
   carts.put(
     '/update',
     (req: express.Request, res: express.Response): void => {
-        const id: number = Number(req.query.id);
-        const user_id: number = Number(req.query.user_id);
-        const product_id: number = Number(req.query.product_id);
-        const cart: CartType = {
-            id: id,
-            user_id: user_id,
-            product_id: product_id
-        }
-      CartModel.update(cart)
+      const cartArray :CartType[]= req.body.carts;
+      CartModel.update(cartArray)
         .then((result) => {
           res.json(result);
         })

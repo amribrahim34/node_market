@@ -44,7 +44,7 @@ class CartModel {
     try {
       const con = await Client.connect();
       carts.forEach(async(cart) => {
-        const insert_sql = 'INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)';
+        const insert_sql = `INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)`;
         await con.query(insert_sql,[cart.user_id , cart.product_id , cart.quantity]);
       });
       const sql = `
@@ -52,13 +52,15 @@ class CartModel {
         carts.* , 
         products.name ,
         products.price ,
-        products.details ,
-      FORM carts 
-      INNER JOIN products 
+        products.details 
+      FROM carts 
+      JOIN products 
       ON carts.product_id=products.id 
       WHERE carts.user_id=$1`; 
       const result =  await con.query(sql,[carts[0].user_id]);
       con.release();
+      console.log(result.rows);
+      console.log(result);
       return result.rows;
     } catch (error) {
       throw new Error(`cannot store carts ${error}`);

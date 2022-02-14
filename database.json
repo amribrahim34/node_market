@@ -23,7 +23,7 @@
         "user": "miro",
         "password": "password",
         "host": "localhost",
-        "database": "market_test",
+        "database": "market",
         "port": "20144",
         "ssl": "true",
         "schema": "my_schema"
