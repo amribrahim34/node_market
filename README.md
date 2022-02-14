@@ -28,35 +28,35 @@
 
 ### CATEGORIES
 
--method post /api/categories/create
--method get /api/categories
--method put /api/categories/update
--method delete /api/categories/delete
+- method post /api/categories/create
+- method get /api/categories
+- method put /api/categories/update
+- method delete /api/categories/delete
 
 ### USERS
 
--method post /api/users/create
--method get /api/users
--method put /api/users/update
--method delete /api/users/delete
+- method post /api/users/create
+- method get /api/users
+- method put /api/users/update
+- method delete /api/users/delete
 
 ### CARTS
 
--method post /api/carts/create
--method get /api/carts
--method put /api/carts/update
--method delete /api/carts/delete
+- method post /api/carts/create
+- method get /api/carts
+- method put /api/carts/update
+- method delete /api/carts/delete
 
 ### ORDERS
 
--method post /api/orders/create
--method get /api/orders
--method put /api/orders/update
--method delete /api/orders/
+- method post /api/orders/create
+- method get /api/orders
+- method put /api/orders/update
+- method delete /api/orders/
 
 ### PRODUCTS
 
--method post /api/products/create
--method get /api/products
--method put /api/products/update
--method delete /api/products/delete
+- method post /api/products/create
+- method get /api/products
+- method put /api/products/update
+- method delete /api/products/delete
