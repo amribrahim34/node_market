@@ -10,7 +10,8 @@
     "lint": "eslint --fix . --ext .ts",
     "prettier": "prettier --write src/**/*.ts ",
     "build": "npx tsc",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "migrate": "db-migrate up"
   },
   "repository": {
     "type": "git",
