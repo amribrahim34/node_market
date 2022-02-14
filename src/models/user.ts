@@ -112,14 +112,15 @@ class UserModel {
 
   /**
    * method to get products of the user from the database
-   * @param Id
+   * @param user_id
    * @return Products
    */
-   async products(id: number): Promise<CartType[]> {
+   async cartProducts(user_id: number): Promise<CartType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'SELECT * FROM products WHERE user_id=$1';
-      const result = await con.query(sql, [id]);
+      const sql = 'SELECT quantity FORM carts INNER JOIN products ON carts.product_id=products.id WHERE carts.user_id=$1';
+      const result = await con.query(sql, [user_id]);
+      console.log(result);
       con.release();
       return result.rows;
     } catch (error) {

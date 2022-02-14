@@ -1,13 +1,23 @@
 import { Connection } from 'pg';
 import Client from '../database';
 
-export type CartType = {
+type CartType = {
   id?: Number;
   user_id: Number;
   product_id: Number;
+  quantity: Number;
 };
 
-export class CartModel {
+type CartProductType = {
+  user_id: Number;
+  product_id: Number;
+  name: string;
+  details: string;
+  quantity: Number;
+  price: Number;
+};
+
+class CartModel {
 
   /**
    * get all carts from the database 
@@ -27,14 +37,27 @@ export class CartModel {
 
   /**
    * create new cart  
-   * @return cart
-   * @param [user_id,product_id]
+   * @return carts[]
+   * @param carts[]
    */
-   static async create(cart:CartType): Promise<CartType[]> {
+   static async create(carts:CartType[]): Promise<CartProductType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'INSERT INTO carts (user_id,product_id) VALUES ($1,$2) RETURNING *';
-      const result = await con.query(sql,[cart.user_id,cart.product_id]);
+      carts.forEach(async(cart) => {
+        const insert_sql = 'INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)';
+        await con.query(insert_sql,[cart.user_id , cart.product_id , cart.quantity]);
+      });
+      const sql = `
+      SELECT
+        carts.* , 
+        products.name ,
+        products.price ,
+        products.details ,
+      FORM carts 
+      INNER JOIN products 
+      ON carts.product_id=products.id 
+      WHERE carts.user_id=$1`; 
+      const result =  await con.query(sql,[carts[0].user_id]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -59,16 +82,31 @@ export class CartModel {
     }
   }
 
-  /**
-   * edit existing cart  
-   * @return cart
-   * @param id
+  /** 
+   * @description delete user carts and create new ones
+   * @return carts[]
+   * @param carts[]
    */
-   static async update(cart:CartType): Promise<CartType[]> {
+   static async update(carts:CartType[]): Promise<CartProductType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'UPDATE carts SET user_id=$1 , product_id=$2 WHERE id=$3 RETURNING *';
-      const result = await con.query(sql,[cart.user_id,cart.product_id,cart.id]);
+      const delete_sql = "DELETE FROM carts WHERE WHERE user_id=$1"
+      await con.query(delete_sql,[carts[0].user_id]);
+      carts.forEach(async(cart) => {
+        const insert_sql = 'INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)';
+        await con.query(insert_sql,[cart.user_id , cart.product_id , cart.quantity]);
+      });
+      const sql = 
+      `SELECT
+        carts.* , 
+        products.name ,
+        products.price ,
+        products.details ,
+      FORM carts 
+      INNER JOIN products 
+      ON carts.product_id=products.id 
+      WHERE carts.user_id=$1`;
+      const result =  await con.query(sql,[carts[0].user_id]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -95,3 +133,5 @@ export class CartModel {
   }
   
 }
+
+export {CartModel , CartProductType,CartType}

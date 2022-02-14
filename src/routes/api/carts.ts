@@ -29,13 +29,8 @@ const carts = express.Router();
   carts.post(
     '/create',
     (req: express.Request, res: express.Response): void => {
-      const user_id: number = Number(req.query.user_id);
-      const product_id: number = Number(req.query.product_id);
-      const cart:CartType = {
-          user_id: user_id,
-          product_id: product_id
-      }
-      CartModel.create(cart)
+      const cartArray :any= req.query.carts;
+      CartModel.create(cartArray)
         .then((result) => {
           res.json(result);
         })
