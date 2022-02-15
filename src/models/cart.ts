@@ -2,25 +2,24 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 type CartType = {
-  id?: Number;
-  user_id: Number;
-  product_id: Number;
-  quantity: Number;
+  id?: number;
+  user_id: number;
+  product_id: number;
+  quantity: number;
 };
 
 type CartProductType = {
-  user_id: Number;
-  product_id: Number;
+  user_id: number;
+  product_id: number;
   name: string;
   details: string;
-  quantity: Number;
-  price: Number;
+  quantity: number;
+  price: number;
 };
 
 class CartModel {
-
   /**
-   * get all carts from the database 
+   * get all carts from the database
    * @return cart[]
    */
   static async index(): Promise<CartType[]> {
@@ -36,16 +35,16 @@ class CartModel {
   }
 
   /**
-   * create new cart  
+   * create new cart
    * @return carts[]
    * @param carts[]
    */
-   static async create(carts:CartType[]): Promise<CartProductType[]> {
+  static async create(carts:CartType[]): Promise<CartProductType[]> {
     try {
       const con = await Client.connect();
-      carts.forEach(async(cart) => {
-        const insert_sql = `INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)`;
-        await con.query(insert_sql,[cart.user_id , cart.product_id , cart.quantity]);
+      carts.forEach(async (cart) => {
+        const insert_sql = 'INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)';
+        await con.query(insert_sql, [cart.user_id, cart.product_id, cart.quantity]);
       });
       const sql = `
       SELECT
@@ -56,11 +55,9 @@ class CartModel {
       FROM carts 
       JOIN products 
       ON carts.product_id=products.id 
-      WHERE carts.user_id=$1`; 
-      const result =  await con.query(sql,[carts[0].user_id]);
+      WHERE carts.user_id=$1`;
+      const result = await con.query(sql, [carts[0].user_id]);
       con.release();
-      console.log(result.rows);
-      console.log(result);
       return result.rows;
     } catch (error) {
       throw new Error(`cannot store carts ${error}`);
@@ -68,15 +65,15 @@ class CartModel {
   }
 
   /**
-   * return  cart  
+   * return  cart
    * @return cart
    * @param id
    */
-   static async show(id:number): Promise<CartType[]> {
+  static async show(id:number): Promise<CartType[]> {
     try {
       const con = await Client.connect();
       const sql = 'SELECT * FROM carts WHERE id=$1';
-      const result = await con.query(sql,[id]);
+      const result = await con.query(sql, [id]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -84,31 +81,30 @@ class CartModel {
     }
   }
 
-  /** 
+  /**
    * @description delete user carts and create new ones
    * @return carts[]
    * @param carts[]
    */
-   static async update(carts:CartType[]): Promise<CartProductType[]> {
+  static async update(carts:CartType[]): Promise<CartProductType[]> {
     try {
       const con = await Client.connect();
-      const delete_sql = "DELETE FROM carts WHERE WHERE user_id=$1"
-      await con.query(delete_sql,[carts[0].user_id]);
-      carts.forEach(async(cart) => {
+      const delete_sql = 'DELETE FROM carts WHERE user_id=$1';
+      await con.query(delete_sql, [carts[0].user_id]);
+      carts.forEach(async (cart) => {
         const insert_sql = 'INSERT INTO carts (user_id,product_id,quantity) VALUES ($1,$2,$3)';
-        await con.query(insert_sql,[cart.user_id , cart.product_id , cart.quantity]);
+        await con.query(insert_sql, [cart.user_id, cart.product_id, cart.quantity]);
       });
-      const sql = 
-      `SELECT
+      const sql = `SELECT
         carts.* , 
         products.name ,
         products.price ,
-        products.details ,
-      FORM carts 
-      INNER JOIN products 
+        products.details 
+      FROM carts 
+      JOIN products 
       ON carts.product_id=products.id 
       WHERE carts.user_id=$1`;
-      const result =  await con.query(sql,[carts[0].user_id]);
+      const result = await con.query(sql, [carts[0].user_id]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -116,24 +112,22 @@ class CartModel {
     }
   }
 
-
   /**
-   * delete existing cart from database 
+   * delete existing cart from database
    * @return delete message
    * @param id
    */
-   static async delete(id:number): Promise<string> {
+  static async delete(id:number): Promise<string> {
     try {
       const con = await Client.connect();
       const sql = 'DELETE FROM carts WHERE id=$1';
-      const result = await con.query(sql,[id]);
+      await con.query(sql, [id]);
       con.release();
       return 'cart was deleted successfully';
     } catch (error) {
       throw new Error(`cannot delete cart ${error}`);
     }
   }
-  
 }
 
-export {CartModel , CartProductType,CartType}
+export { CartModel, CartProductType, CartType };

@@ -1,9 +1,8 @@
 import { Connection } from 'pg';
-import Client from '../database';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import Client from '../database';
 import { CartType } from './cart';
-
 
 type UserType = {
   id?: Number;
@@ -21,12 +20,11 @@ const {
 } = process.env;
 
 class UserModel {
-
   /**
    * async method to get all users
    * @returns User::all
    */
-  static async  index(): Promise<UserType[]> {
+  static async index(): Promise<UserType[]> {
     try {
       const con = await Client.connect();
       const sql = 'SELECT * FROM users';
@@ -38,22 +36,20 @@ class UserModel {
     }
   }
 
-
   /**
    * async method to create new user
    * @param User
    * @returns User
    */
-  static async create(user :UserType):Promise<UserType[]>{
+  static async create(user :UserType):Promise<UserType[]> {
     try {
       const con = await Client.connect();
       const salt = bcrypt.genSaltSync(Number(SALT_ROUNDS));
       const hash = bcrypt.hashSync(String(user.password) + BCRYPT_PASSWORD, salt);
-      const sql = `INSERT INTO users (name , password , email) VALUES ($1 , $2 ,$3)`;
-      const result = await con.query(sql,  [user.name, hash  , user.email]);
+      const sql = 'INSERT INTO users (name , password , email) VALUES ($1 , $2 ,$3)';
+      const result = await con.query(sql, [user.name, hash, user.email]);
       con.release();
       return result.rows;
-      
     } catch (error) {
       throw new Error(`cannot create user ${error}`);
     }
@@ -64,11 +60,11 @@ class UserModel {
    * @param [Name , Id]
    * @returns User
    */
-   static async update(user: UserType): Promise<UserType[]> {
+  static async update(user: UserType): Promise<UserType[]> {
     try {
       const con = await Client.connect();
       const sql = 'UPDATE users SET name=$1 , email=$2 , password=$3 WHERE id=$4 RETURNING *';
-      const result = await con.query(sql, [user.name,user.email,user.password, user.id]);
+      const result = await con.query(sql, [user.name, user.email, user.password, user.id]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -98,7 +94,7 @@ class UserModel {
    * @param Id
    * @return message
    */
-   async cart(id: number): Promise<CartType[]> {
+  async cart(id: number): Promise<CartType[]> {
     try {
       const con = await Client.connect();
       const sql = 'SELECT * FROM carts WHERE user_id=$1';
@@ -115,7 +111,7 @@ class UserModel {
    * @param user_id
    * @return Products
    */
-   async cartProducts(user_id: number): Promise<CartType[]> {
+  async cartProducts(user_id: number): Promise<CartType[]> {
     try {
       const con = await Client.connect();
       const sql = 'SELECT quantity FORM carts INNER JOIN products ON carts.product_id=products.id WHERE carts.user_id=$1';
@@ -133,7 +129,7 @@ class UserModel {
    * @param Id
    * @return Products
    */
-   async orders(id: number): Promise<CartType[]> {
+  async orders(id: number): Promise<CartType[]> {
     try {
       const con = await Client.connect();
       const sql = 'SELECT * FROM orders WHERE user_id=$1';

@@ -4,12 +4,29 @@ import Client from '../database';
 export type OrderType = {
   id?: number;
   user_id: number;
-  quantity: number;
-  products: number;
+  status: boolean;
+  products ?: [];
 };
 
-export class OrderModel {
+type UpdateOrderType = {
+  id: number;
+  user_id: number;
+  status: boolean;
+  products : [];
+};
 
+type RequestProductType = {
+  product_id: number;
+  quantity: number;
+  order_id? :number
+}
+
+type ComingOrderType = {
+  products:[];
+  user_id:[];
+}
+
+export class OrderModel {
   /**
    * async static method to get all orders
    * @returns Order::all
@@ -31,12 +48,27 @@ export class OrderModel {
    * @param Name
    * @returns Order
    */
-   static async create(order: OrderType): Promise<OrderType[]> {
+  static async create(order: ComingOrderType): Promise<OrderType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'INSERT INTO orders (user_id,quantity,products) VALUES($1,$2,$3) RETURNING *';
-      const result = await con.query(sql, [order.user_id,order.quantity,order.products]);
+      const order_sql = 'INSERT INTO orders (user_id) VALUES($1) RETURNING *';
+      const created_order = await con.query(order_sql, [order.user_id]);
+      order.products.forEach(async (product :RequestProductType) => {
+        const insert_sql = 'INSERT INTO order_product (order_id,product_id,quantity) VALUES ($1,$2,$3)';
+        await con.query(insert_sql, [created_order.rows[0].id, product.product_id, product.quantity]);
+      });
       con.release();
+      const sql = `SELECT
+        orders.status , 
+        order_product.quantity ,
+        products.name ,
+        products.price ,
+        products.details 
+      FROM orders 
+      JOIN order_product ON orders.id=order_product.order_id 
+      JOIN products ON order_product.product_id=products.id 
+      WHERE orders.id=$1`;
+      const result = await con.query(sql, [created_order.rows[0].id]);
       return result.rows;
     } catch (error) {
       throw new Error(`cannot get order ${error}`);
@@ -48,11 +80,27 @@ export class OrderModel {
    * @param [Name , Id]
    * @returns Order
    */
-  static async update(order: OrderType): Promise<OrderType[]> {
+  static async update(order: UpdateOrderType): Promise<OrderType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'UPDATE orders SET quantity=$1 , products=2 WHERE id=$2 RETURNING *';
-      const result = await con.query(sql, [order.quantity, order.products]);
+      const delete_sql = 'DELETE FROM order_product WHERE order_id=$1';
+      await con.query(delete_sql, [order.id]);
+      order.products.forEach(async (product :RequestProductType) => {
+        const insert_sql = 'INSERT INTO order_product (order_id,product_id,quantity) VALUES ($1,$2,$3)';
+        await con.query(insert_sql, [order.id, product.product_id, product.quantity]);
+      });
+
+      const sql = `SELECT
+        orders.status , 
+        order_product.quantity ,
+        products.name ,
+        products.price ,
+        products.details 
+      FROM orders 
+      JOIN order_product ON orders.id=order_product.order_id 
+      JOIN products ON order_product.product_id=products.id 
+      WHERE orders.id=$1`;
+      const result = await con.query(sql, [order.id]);
       con.release();
       return result.rows;
     } catch (error) {

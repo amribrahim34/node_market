@@ -1,5 +1,5 @@
 import express from 'express';
-import {UserModel , UserType} from '../../models/user'
+import { UserModel, UserType } from '../../models/user';
 
 const users = express.Router();
 
@@ -31,10 +31,10 @@ users.post(
     const email: string = String(req.query.email);
     const password: string = String(req.query.password);
     const user_data : UserType = {
-        name: name,
-        email: email,
-        password: password,
-    }
+      name,
+      email,
+      password,
+    };
     UserModel.create(user_data)
       .then((result) => {
         res.json(result);
@@ -59,11 +59,11 @@ users.put(
     const email: string = String(req.query.email);
     const password: string = String(req.query.password);
     const user_data : UserType = {
-        id: id,
-        name: name,
-        email: email,
-        password: password,
-    }
+      id,
+      name,
+      email,
+      password,
+    };
     UserModel.update(user_data)
       .then((result) => {
         res.json(result);
