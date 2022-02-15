@@ -5,10 +5,11 @@ import Client from '../database';
 import { CartType } from './cart';
 
 type UserType = {
-  id?: Number;
-  name: String;
-  password: String;
-  email: String;
+  id?: number;
+  first_name: string;
+  last_name: string;
+  password: string;
+  email: string;
 };
 
 dotenv.config();
@@ -45,9 +46,17 @@ class UserModel {
     try {
       const con = await Client.connect();
       const salt = bcrypt.genSaltSync(Number(SALT_ROUNDS));
-      const hash = bcrypt.hashSync(String(user.password) + BCRYPT_PASSWORD, salt);
-      const sql = 'INSERT INTO users (name , password , email) VALUES ($1 , $2 ,$3)';
-      const result = await con.query(sql, [user.name, hash, user.email]);
+      const hashed = bcrypt.hashSync(String(user.password) + BCRYPT_PASSWORD, salt);
+      const sql = `
+      INSERT INTO 
+        users (first_name , last_name  , email , password) 
+      VALUES ($1 , $2 ,$3 , $4) RETURNING *`;
+      const result = await con.query(sql, [
+        user.first_name, 
+        user.last_name, 
+        user.email,
+        hashed
+      ]);
       con.release();
       return result.rows;
     } catch (error) {
@@ -63,8 +72,23 @@ class UserModel {
   static async update(user: UserType): Promise<UserType[]> {
     try {
       const con = await Client.connect();
-      const sql = 'UPDATE users SET name=$1 , email=$2 , password=$3 WHERE id=$4 RETURNING *';
-      const result = await con.query(sql, [user.name, user.email, user.password, user.id]);
+      const salt = bcrypt.genSaltSync(Number(SALT_ROUNDS));
+      const hash = bcrypt.hashSync(String(user.password) + BCRYPT_PASSWORD, salt);
+      const sql = `
+      UPDATE users 
+      SET 
+        first_name=$1 , 
+        last_name=$2 , 
+        email=$3 , 
+        password=$4 
+      WHERE id=$5 RETURNING *`;
+      const result = await con.query(sql, [
+        user.first_name, 
+        user.last_name, 
+        user.email, 
+        hash, 
+        user.id
+      ]);
       con.release();
       return result.rows;
     } catch (error) {
