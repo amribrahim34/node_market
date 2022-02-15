@@ -1,18 +1,18 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { OrderModel, OrderType } from '../../models/order';
+import { ProductModel, ProductType } from '../../models/product';
 
-const orders = express.Router();
-orders.use(bodyParser.urlencoded({ extended: false }));
-orders.use(bodyParser.json());
+const products = express.Router();
+products.use(bodyParser.urlencoded({ extended: false }));
+products.use(bodyParser.json());
 
 /**
- * methode to get all orders from the database
+ * methode to get all products from the database
  * @method get
- * @return orders
+ * @return products
  */
-orders.get('/', (req: express.Request, res: express.Response): void => {
-  OrderModel.index()
+products.get('/', (req: express.Request, res: express.Response): void => {
+  ProductModel.index()
     .then((result) => {
       res.json(result);
     })
@@ -22,16 +22,17 @@ orders.get('/', (req: express.Request, res: express.Response): void => {
 });
 
 /**
-   * methode to insert new order to the database
+   * methode to insert new Product to the database
    * @method POST
    * @param [products , user_id , quantity]
-   * @return order
+   * @return Product
    */
-orders.post(
+products.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
-    const order = req.body;
-    OrderModel.create(order)
+    const Product :ProductType= req.body;
+    console.log(Product);
+    ProductModel.create(Product)
       .then((result) => {
         res.json(result);
       })
@@ -42,17 +43,16 @@ orders.post(
 );
 
 /**
-   * methode to update order in the database
+   * methode to update Product in the database
    * @method PUT
    * @param [id ,products , user_id , quantity]
-   * @return order
+   * @return Product
    */
-orders.put(
+products.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
-    const order = req.body;
-    console.log(order);
-    OrderModel.update(order)
+    const Product :ProductType= req.body;
+    ProductModel.update(Product)
       .then((result) => {
         res.json(result);
       })
@@ -63,16 +63,16 @@ orders.put(
 );
 
 /**
-   * methode to delete order from the database
+   * methode to delete Product from the database
    * @method delete
    * @param Id
    * @return message
    */
-orders.delete(
+products.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.query.id);
-    OrderModel.delete(id)
+    ProductModel.delete(id)
       .then((result) => {
         res.json(result);
       })
@@ -82,4 +82,4 @@ orders.delete(
   },
 );
 
-export default orders;
+export default products;

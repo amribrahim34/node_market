@@ -1,7 +1,11 @@
 import express from 'express';
 import { UserModel, UserType } from '../../models/user';
+import bodyParser from 'body-parser';
+
 
 const users = express.Router();
+users.use(bodyParser.urlencoded({ extended: false }));
+users.use(bodyParser.json());
 
 /**
  * methode to get all users from the database
@@ -27,14 +31,7 @@ users.get('/', (req: express.Request, res: express.Response): void => {
 users.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
-    const name: string = String(req.query.name);
-    const email: string = String(req.query.email);
-    const password: string = String(req.query.password);
-    const user_data : UserType = {
-      name,
-      email,
-      password,
-    };
+    const user_data = req.body;
     UserModel.create(user_data)
       .then((result) => {
         res.json(result);
@@ -54,16 +51,7 @@ users.post(
 users.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
-    const id: number = Number(req.query.id);
-    const name: string = String(req.query.name);
-    const email: string = String(req.query.email);
-    const password: string = String(req.query.password);
-    const user_data : UserType = {
-      id,
-      name,
-      email,
-      password,
-    };
+    const user_data = req.body;
     UserModel.update(user_data)
       .then((result) => {
         res.json(result);
@@ -83,7 +71,7 @@ users.put(
 users.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
-    const id: number = Number(req.query.id);
+    const id: number = Number(req.body.id);
     UserModel.delete(id)
       .then((result) => {
         res.json(result);

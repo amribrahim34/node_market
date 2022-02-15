@@ -2,6 +2,15 @@
 
  a test application for using node.js postgress jasmine.js typescript
 
+## HOW TO SETUP DATABASE
+
+- open psql
+- create new database user running CREATE USER miro WITH PASSWORD 'password';
+- create new database by running CREATE DATABASE market;
+- create test database by running CREATE DATABASE market_test;
+- grant all permissions to user by running GRANT ALL PRIVILEGES ON DATABASE market TO miro;
+- grant all permissions to user by running GRANT ALL PRIVILEGES ON DATABASE market_test TO miro;
+
 ## HOW TO USE
 
 - install db-migrate globally
@@ -15,9 +24,10 @@
 ## ENVIRONMENTAL VARIABLES
 
 - ENV
-- PORT
+- PORT = 3000
 - POSTGRES_HOST
 - POSTGRES_DB
+- POSTGRES_ PORT = 5432
 - POSTGRES_TEST_DB
 - POSTGRES_USER
 - POSTGRES_PASSWORD
