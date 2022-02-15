@@ -2,7 +2,7 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 type ProductType = {
-  id: Number;
+  id?: Number;
   name: String;
   details: String;
   price: Number;

@@ -27,7 +27,7 @@ categories.get('/', (req: express.Request, res: express.Response): void => {
 categories.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
-    const name: string = String(req.query.name);
+    const name: string = String(req.body.name);
     Category.create(name)
       .then((result) => {
         res.json(result);
@@ -47,12 +47,8 @@ categories.post(
 categories.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
-    const id: number = Number(req.query.id);
-    const name: string = String(req.query.name);
-    const cat: CategoryType = {
-      id,
-      name,
-    };
+    
+    const cat: CategoryType = req.body;
     Category.update(cat)
       .then((result) => {
         res.json(result);
@@ -72,7 +68,7 @@ categories.put(
 categories.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
-    const id: number = Number(req.query.id);
+    const id: number = Number(req.body.id);
     Category.delete(id)
       .then((result) => {
         res.json(result);
