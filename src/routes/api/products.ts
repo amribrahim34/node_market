@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { ProductModel, ProductType } from '../../models/product';
+import jwt from 'jsonwebtoken';
 
 const products = express.Router();
 products.use(bodyParser.urlencoded({ extended: false }));
@@ -31,7 +32,7 @@ products.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const Product :ProductType= req.body;
-    console.log(Product);
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     ProductModel.create(Product)
       .then((result) => {
         res.json(result);
@@ -52,6 +53,7 @@ products.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
     const Product :ProductType= req.body;
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     ProductModel.update(Product)
       .then((result) => {
         res.json(result);
@@ -72,6 +74,7 @@ products.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.query.id);
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     ProductModel.delete(id)
       .then((result) => {
         res.json(result);

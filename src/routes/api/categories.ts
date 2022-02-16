@@ -1,7 +1,13 @@
 import express from 'express';
 import { Category, CategoryType } from '../../models/category';
+import bodyParser from 'body-parser';
+import  jwt  from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
 
 const categories = express.Router();
+categories.use(bodyParser.urlencoded({ extended: false }));
+categories.use(bodyParser.json());
 
 /**
  * methode to get all categories from the database
@@ -28,6 +34,7 @@ categories.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const name: string = String(req.body.name);
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     Category.create(name)
       .then((result) => {
         res.json(result);
@@ -49,6 +56,7 @@ categories.put(
   (req: express.Request, res: express.Response): void => {
     
     const cat: CategoryType = req.body;
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     Category.update(cat)
       .then((result) => {
         res.json(result);
@@ -69,6 +77,7 @@ categories.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.body.id);
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     Category.delete(id)
       .then((result) => {
         res.json(result);

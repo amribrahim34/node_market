@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { OrderModel, OrderType } from '../../models/order';
+import jwt from 'jsonwebtoken';
 
 const orders = express.Router();
 orders.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +32,7 @@ orders.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const order = req.body;
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     OrderModel.create(order)
       .then((result) => {
         res.json(result);
@@ -51,6 +53,7 @@ orders.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
     const order = req.body;
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     console.log(order);
     OrderModel.update(order)
       .then((result) => {
@@ -72,6 +75,7 @@ orders.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.query.id);
+    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     OrderModel.delete(id)
       .then((result) => {
         res.json(result);
