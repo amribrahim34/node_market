@@ -34,7 +34,13 @@ categories.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const name: string = String(req.body.name);
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     Category.create(name)
       .then((result) => {
         res.json(result);
@@ -56,7 +62,13 @@ categories.put(
   (req: express.Request, res: express.Response): void => {
     
     const cat: CategoryType = req.body;
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     Category.update(cat)
       .then((result) => {
         res.json(result);
@@ -77,7 +89,13 @@ categories.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.body.id);
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     Category.delete(id)
       .then((result) => {
         res.json(result);

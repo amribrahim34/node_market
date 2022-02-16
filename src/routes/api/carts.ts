@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { CartModel, CartType } from '../../models/cart';
+import jwt from 'jsonwebtoken';
 
 const carts = express.Router();
 carts.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +32,13 @@ carts.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const cartArray = req.body;
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     CartModel.create(cartArray)
       .then((result) => {
         res.json(result);
@@ -51,6 +59,13 @@ carts.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
     const cartArray :CartType[] = req.body;
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     CartModel.update(cartArray)
       .then((result) => {
         res.json(result);
@@ -71,6 +86,13 @@ carts.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.body.id);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     CartModel.delete(id)
       .then((result) => {
         res.json(result);

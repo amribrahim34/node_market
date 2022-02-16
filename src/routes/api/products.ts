@@ -32,7 +32,13 @@ products.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const Product :ProductType= req.body;
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     ProductModel.create(Product)
       .then((result) => {
         res.json(result);
@@ -53,7 +59,13 @@ products.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
     const Product :ProductType= req.body;
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     ProductModel.update(Product)
       .then((result) => {
         res.json(result);
@@ -74,7 +86,13 @@ products.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.query.id);
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     ProductModel.delete(id)
       .then((result) => {
         res.json(result);

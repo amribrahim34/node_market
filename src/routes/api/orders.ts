@@ -32,7 +32,13 @@ orders.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
     const order = req.body;
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     OrderModel.create(order)
       .then((result) => {
         res.json(result);
@@ -53,7 +59,13 @@ orders.put(
   '/update',
   (req: express.Request, res: express.Response): void => {
     const order = req.body;
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     console.log(order);
     OrderModel.update(order)
       .then((result) => {
@@ -75,7 +87,13 @@ orders.delete(
   '/delete',
   (req: express.Request, res: express.Response): void => {
     const id: number = Number(req.query.id);
-    jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    try {
+      jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
+    } catch (error) {
+      res.status(401)
+      res.json(`invalid token ${error}`)
+      return;
+    }
     OrderModel.delete(id)
       .then((result) => {
         res.json(result);
