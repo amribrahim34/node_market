@@ -113,6 +113,28 @@ class UserModel {
     }
   }
 
+  
+  /**
+   * async method to create new user
+   * @param User
+   * @returns User
+   */
+   static async authenticate(user :UserType):Promise<UserType[]|string> {
+    try {
+      const con = await Client.connect();
+      const get_user_query = `SELECT * FROM users WHERE email=$1`
+      const user_array = await con.query(get_user_query,[user.email]);
+      con.release();
+      if (bcrypt.compareSync(user.password+BCRYPT_PASSWORD,user_array.rows[0].password)) {
+        return user_array.rows[0]
+      }else{
+        return "please provide valid credentials"
+      }
+    } catch (error) {
+      throw new Error(`cannot create user ${error}`);
+    }
+  }
+
   /**
    * method to get cart of the user from the database
    * @param Id

@@ -1,12 +1,14 @@
 import express from 'express';
 import { UserModel, UserType } from '../../models/user';
 import bodyParser from 'body-parser';
+import  jwt  from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 
 const users = express.Router();
 users.use(bodyParser.urlencoded({ extended: false }));
 users.use(bodyParser.json());
-
+const TOKEN_SECRET = process.env.TOKEN_SECRET
 /**
  * methode to get all users from the database
  * @method get
@@ -34,7 +36,11 @@ users.post(
     const user_data = req.body;
     UserModel.create(user_data)
       .then((result) => {
-        res.json(result);
+        let token = jwt.sign(
+          {user:result[0]} , 
+          TOKEN_SECRET as string
+        );
+        res.json(token);
       })
       .catch((error) => {
         res.send(error);
@@ -77,6 +83,22 @@ users.delete(
         res.json(result);
       })
       .catch((error) => {
+        res.send(error);
+      });
+  },
+);
+
+users.post(
+  '/login',
+  (req: express.Request, res: express.Response): void => {
+    const user_data = req.body;
+    UserModel.authenticate(user_data)
+      .then((result) => {
+        console.log(result);
+        res.json(result);
+      })
+      .catch((error) => {
+        console.log(error);
         res.send(error);
       });
   },
