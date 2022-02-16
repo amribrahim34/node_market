@@ -1,6 +1,23 @@
 import { Category, CategoryType } from '../src/models/category';
+import {UserModel , UserType} from '../src/models/user';
 
 describe('Category Model', () => {
+
+  let token = null;
+  const user_array :UserType= {
+    first_name:"amr",
+    last_name:"ibrahim",
+    email:"mail@mail.com",
+    password:"password",
+  };
+  UserModel.create(user_array).then((result)=>{
+    token = result;
+  });
+  
+  beforeEach(function () {
+    //anything in here will apply to everything in each nested describe
+  });
+
   it('should have create method', () => {
     expect(Category.create).toBeDefined;
   });

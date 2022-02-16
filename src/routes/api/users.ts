@@ -94,8 +94,11 @@ users.post(
     const user_data = req.body;
     UserModel.authenticate(user_data)
       .then((result) => {
-        console.log(result);
-        res.json(result);
+        let token = jwt.sign(
+          {user:result[0]} , 
+          TOKEN_SECRET as string
+        );
+        res.json(token);
       })
       .catch((error) => {
         console.log(error);
