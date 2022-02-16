@@ -37,6 +37,7 @@
     "@types/jasmine": "^3.10.3",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/pg": "^8.6.4",
+    "@types/supertest": "^2.0.11",
     "@types/typescript": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
@@ -48,6 +49,7 @@
     "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.4.0",
     "prettier": "^2.5.1",
+    "supertest": "^6.2.2",
     "ts-node": "^10.4.0",
     "ts-watch": "^1.0.8",
     "typescript": "^4.5.5"

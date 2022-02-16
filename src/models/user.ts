@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import Client from '../database';
 import { CartType } from './cart';
+import jwt from 'jsonwebtoken';
 
 type UserType = {
   id?: number;
@@ -193,14 +194,17 @@ class UserModel {
    * @param User
    * @returns Token
    */
-   static async getToken(user :UserType):Promise<UserType[]|string> {
+   static async getToken(user :UserType):Promise<string> {
     try {
       const con = await Client.connect();
       const get_user_query = `SELECT * FROM users WHERE email=$1`
       const user_array = await con.query(get_user_query,[user.email]);
       con.release();
       if (bcrypt.compareSync(user.password+BCRYPT_PASSWORD,user_array.rows[0].password)) {
-        return user_array.rows[0]
+        return   jwt.sign(
+          {user:user_array.rows[0]} , 
+          process.env.TOKEN_SECRET as string
+        );
       }else{
         return "please provide valid credentials"
       }

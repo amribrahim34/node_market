@@ -31,7 +31,7 @@ products.get('/', (req: express.Request, res: express.Response): void => {
 products.post(
   '/create',
   (req: express.Request, res: express.Response): void => {
-    const Product :ProductType= req.body;
+    const Product = req.body;
     try {
       jwt.verify(req.body.token , process.env.TOKEN_SECRET as string);
     } catch (error) {
