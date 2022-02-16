@@ -31,28 +31,29 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ### Product
 
-- id
-- name
-- price
-- details
-- category_id
+- id integer primary key
+- name varchar 
+- price integer
+- details text
+- category_id integer foreign key categories
 
 ### User
 
-- id
-- firstName
-- lastName
-- password
+- id integer primary key
+- firstName varchar
+- lastName varchar
+- email varchar
+- password varchar
 
 ### Order
 
-- id
-- user_id
+- id integer primary key
+- user_id integer foreign key users
 - status of order (active or complete)
 
 ### OrderProduct
 
-- id
-- order_id
-- product_id
-- quantity
+- id integer primary key
+- order_id integer foreign key orders
+- product_id integer foreign key products
+- quantity integer
