@@ -66,7 +66,6 @@ orders.put(
       res.json(`invalid token ${error}`)
       return;
     }
-    console.log(order);
     OrderModel.update(order)
       .then((result) => {
         res.json(result);
