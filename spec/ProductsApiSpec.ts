@@ -90,7 +90,7 @@ describe("test API endpoints ", async () => {
         expect(res.status).toBe(200);
     });
 
-    it("test the create API return code 200", async () => {
+    it("test the delete API return code 200", async () => {
 
         const tokenRespose = await request(app)
             .post("/api/users/login")

@@ -105,12 +105,12 @@ class UserModel {
   static async delete(id: number): Promise<string> {
     try {
       const con = await Client.connect();
-      const sql = 'DELETE FROM categories WHERE id=$1';
+      const sql = 'DELETE FROM users WHERE id=$1';
       await con.query(sql, [id]);
       con.release();
       return 'row was deleted successfully';
     } catch (error) {
-      throw new Error(`cannot get categories ${error}`);
+      throw new Error(`cannot delete user ${error}`);
     }
   }
 

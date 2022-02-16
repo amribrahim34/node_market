@@ -21,48 +21,79 @@ describe("test API endpoints ", () => {
       expect(res.status).toBe(200);
     });
   
-    // it("test the create API return code 200", async () => {
-    //     request(app)
-    //         .post("/api/users/login")
-    //         .send(
-    //             {
-    //                 "email":user_array.email,
-    //                 "password":  user_array.password
-    //             }
-    //         )
-    //         .then(async (token)=>{
-    //             const res = await request(app)
-    //                 .post("/api/categories/create")
-    //                 .send(
-    //                     {
-    //                         "name":"category",
-    //                         "token":  token.text
-    //                     }
-    //                 );
-    //             expect(res.status).toBe(200);
-    //         });
-    // });
+    it("test category create API return code 200", async () => {
 
-    // it("test the update API return code 200", async () => {
-    //     request(app)
-    //         .post("/api/users/login")
-    //         .send(
-    //             {
-    //                 "email":user_array.email,
-    //                 "password":  user_array.password
-    //             }
-    //         )
-    //         .then(async (token)=>{
-    //             const res = await request(app)
-    //                 .post("/api/categories/update")
-    //                 .send(
-    //                     {
-    //                         "id":1,
-    //                         "name":"category",
-    //                         "token":  token.text
-    //                     }
-    //                 );
-    //             expect(res.status).toBe(200);
-    //         });
-    // });
+        const tokenRespose = await request(app)
+            .post("/api/users/login")
+            .send(
+                {
+                    "email":user_array.email,
+                    "password":  user_array.password
+                }
+            );
+        const token = String(tokenRespose.text).replace(/['"]+/g, '')
+        const res = await request(app)
+            .post("/api/categories/create")
+            .send(
+                {
+                    "name":"category",
+                    "token":  token
+                }
+            );
+        expect(res.status).toBe(200);
+    });
+
+    it("test the update API return code 200", async () => {
+
+        const tokenRespose = await request(app)
+            .post("/api/users/login")
+            .send(
+                {
+                    "email":user_array.email,
+                    "password":  user_array.password
+                }
+            );
+        const token = String(tokenRespose.text).replace(/['"]+/g, '')
+        const res = await request(app)
+            .put("/api/categories/update")
+            .send(
+                {
+                    "id":1,
+                    "name":"category",
+                    "token":  token
+                }
+            );
+        expect(res.status).toBe(200);
+    });
+
+    it("test the delete category API return code 200", async () => {
+
+        const tokenRespose = await request(app)
+            .post("/api/users/login")
+            .send(
+                {
+                    "email":user_array.email,
+                    "password":  user_array.password
+                }
+            );
+        const token = String(tokenRespose.text).replace(/['"]+/g, '')
+        const category = await request(app)
+            .put("/api/categories/create")
+            .send(
+                {
+                    "name":"category",
+                    "token":  token
+                }
+            );
+        const catId = Number(category.body.id);
+        const res = await request(app)
+            .delete("/api/categories/delete")
+            .send(
+                {
+                    "id":catId,
+                    "token":  token
+                }
+            );
+        expect(res.status).toBe(200);
+    });
 })
