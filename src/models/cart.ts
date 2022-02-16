@@ -9,6 +9,7 @@ type CartType = {
 };
 
 type CartProductType = {
+  id?: number;
   user_id: number;
   product_id: number;
   name: string;
@@ -123,7 +124,7 @@ class CartModel {
       const sql = 'DELETE FROM carts WHERE id=$1';
       await con.query(sql, [id]);
       con.release();
-      return 'cart was deleted successfully';
+      return 'row was deleted successfully';
     } catch (error) {
       throw new Error(`cannot delete cart ${error}`);
     }

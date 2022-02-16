@@ -5,14 +5,14 @@ export type OrderType = {
   id?: number;
   user_id: number;
   status: boolean;
-  products ?: [];
+  products ?: {product_id : number; quantity:number;} [];
 };
 
-type UpdateOrderType = {
+export type UpdateOrderType = {
   id: number;
   user_id: number;
-  status: boolean;
-  products : [];
+  status?: boolean;
+  products : {product_id : number; quantity:number;} [];
 };
 
 type RequestProductType = {
@@ -21,9 +21,9 @@ type RequestProductType = {
   order_id? :number
 }
 
-type ComingOrderType = {
-  products:[];
-  user_id:[];
+export type ComingOrderType = {
+  products: {product_id : number; quantity:number;} [];
+  user_id: number;
 }
 
 export class OrderModel {
@@ -59,7 +59,7 @@ export class OrderModel {
       });
       con.release();
       const sql = `SELECT
-        orders.status , 
+        orders.* , 
         order_product.quantity ,
         products.name ,
         products.price ,
@@ -91,6 +91,7 @@ export class OrderModel {
       });
 
       const sql = `SELECT
+        orders.user_id , 
         orders.status , 
         order_product.quantity ,
         products.name ,
@@ -116,8 +117,10 @@ export class OrderModel {
   static async delete(id: number): Promise<any> {
     try {
       const con = await Client.connect();
-      const sql = 'DELETE FROM orders WHERE id=$1';
-      await con.query(sql, [id]);
+      const orderProductDelSql = 'DELETE FROM order_product WHERE order_id=$1';
+      await con.query(orderProductDelSql, [id]);
+      const orderDelSql = 'DELETE FROM orders WHERE id=$1';
+      await con.query(orderDelSql, [id]);
       con.release();
       return 'row was deleted successfully';
     } catch (error) {

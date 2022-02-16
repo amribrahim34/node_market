@@ -2,11 +2,11 @@ import { Connection } from 'pg';
 import Client from '../database';
 
 type ProductType = {
-  id?: Number;
-  name: String;
-  details: String;
-  price: Number;
-  category_id: Number;
+  id?: number;
+  name: string;
+  details: string;
+  price: number;
+  category_id: number;
 };
 
 class ProductModel {
