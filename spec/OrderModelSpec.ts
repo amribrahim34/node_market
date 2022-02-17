@@ -2,6 +2,8 @@ import { ProductModel, ProductType } from '../src/models/product';
 import { OrderModel, OrderType ,ComingOrderType , UpdateOrderType} from '../src/models/order';
 import { Category, CategoryType } from '../src/models/category';
 import {UserModel , UserType} from '../src/models/user';
+import { UserSeeder} from './seeders/UserSeeder';
+import { ProductSeeder} from './seeders/ProductSeeder';
 
 describe('order Model', () => {
 
@@ -10,25 +12,8 @@ describe('order Model', () => {
   });
 
   it('create method should insert a order', async () => {
-    const userArray = {
-      "first_name" : 'Amr',
-      "last_name" : 'Ibrahim',
-      "email":'mail@mail.com',
-      "password":"password"
-    }
-    const category = await Category.create("name");
-    const catId = Number( category[0].id)
-    const productArray = {
-        "name":"product 1",
-        "details": "details",
-        "price" : 125,
-        "category_id":catId as number
-    }
-    
-    const product = await ProductModel.create(productArray);
-    const prodId = Number( product[0].id)
-    const user = await UserModel.create(userArray);
-    const usrId = Number( user[0].id)
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
     const orderArray :ComingOrderType= {
         "user_id": usrId as number,
         "products": [{
@@ -45,25 +30,8 @@ describe('order Model', () => {
   });
 
   it('index method should return a list of categories', async () => {
-    const userArray = {
-      "first_name" : 'Amr',
-      "last_name" : 'Ibrahim',
-      "email":'mail@mail.com',
-      "password":"password"
-    }
-    const category = await Category.create("name");
-    const catId = Number( category[0].id)
-    const productArray = {
-        "name":"product 1",
-        "details": "details",
-        "price" : 125,
-        "category_id":catId as number
-    }
-    
-    const product = await ProductModel.create(productArray);
-    const prodId = Number( product[0].id)
-    const user = await UserModel.create(userArray);
-    const usrId = Number( user[0].id)
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
     const orderArray :ComingOrderType= {
         "user_id": usrId as number,
         "products": [{
@@ -81,25 +49,8 @@ describe('order Model', () => {
   });
 
   it('update method should insert a order', async () => {
-    const userArray = {
-        "first_name" : 'Amr',
-        "last_name" : 'Ibrahim',
-        "email":'mail@mail.com',
-        "password":"password"
-      }
-      const category = await Category.create("name");
-      const catId = Number( category[0].id)
-      const productArray = {
-          "name":"product 1",
-          "details": "details",
-          "price" : 125,
-          "category_id":catId as number
-      }
-      
-      const product = await ProductModel.create(productArray);
-      const prodId = Number( product[0].id)
-      const user = await UserModel.create(userArray);
-      const usrId = Number( user[0].id)
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
       const orderArray : ComingOrderType= {
         "user_id": usrId as number,
         "products": [{
@@ -128,27 +79,8 @@ describe('order Model', () => {
   it('delete method should delete a order', async () => {
     const name :string = 'order_test';
     const msg :string = 'row was deleted successfully';
-    
-
-    const userArray = {
-        "first_name" : 'Amr',
-        "last_name" : 'Ibrahim',
-        "email":'mail@mail.com',
-        "password":"password"
-      }
-      const category = await Category.create("name");
-      const catId = Number( category[0].id)
-      const productArray = {
-          "name":"product 1",
-          "details": "details",
-          "price" : 125,
-          "category_id":catId as number
-      }
-      
-      const product = await ProductModel.create(productArray);
-      const prodId = Number( product[0].id)
-      const user = await UserModel.create(userArray);
-      const usrId = Number( user[0].id)
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
       const orderArray :ComingOrderType= {
         "user_id": usrId as number,
         "products": [{

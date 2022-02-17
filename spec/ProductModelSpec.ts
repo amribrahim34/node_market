@@ -1,5 +1,7 @@
 import { ProductModel, ProductType } from '../src/models/product';
 import { Category, CategoryType } from '../src/models/category';
+import {CategorySeeder}from './seeders/CategorySeeder'
+import {ProductSeeder}from './seeders/ProductSeeder'
 
 describe('ProductModel Model', () => {
   it('should have create method', () => {
@@ -7,14 +9,12 @@ describe('ProductModel Model', () => {
   });
 
   it('create method should insert a ProductModel', async () => {
-    const category_name = 'ProductModel_test';
-    const category = await Category.create(category_name);
     const name = 'ProductModel_test';
     const details = 'ProductModel details';
-    const category_id :number= Number(category[0].id);
+    const category_id :number= Number( await CategorySeeder.id());
     const price:number = 10;
     const product = {
-        name,
+        name,   
         details,
         price,
         category_id
@@ -37,21 +37,12 @@ describe('ProductModel Model', () => {
   });
 
   it('update method should insert a ProductModel', async () => {
-    const category_name = 'ProductModel_test';
-    const category = await Category.create(category_name);
-    const category_id :number= Number(category[0].id);
+
+    const category_id :number= Number( await CategorySeeder.id());
     const name = 'ProductModel_test';
     const details = 'ProductModel details';
     const price:number = 10;
-    const product = {
-        name : 'name',
-        details,
-        price,
-        category_id,
-    }
-    
-    const old_product = await ProductModel.create(product);
-    const id:number = Number(old_product[0].id);
+    const id:number = Number(await ProductSeeder.id());
     const new_product = {
         id ,
         name ,
@@ -69,20 +60,7 @@ describe('ProductModel Model', () => {
 
   it('delete method should delete a ProductModel', async () => {
     const msg :string = 'row was deleted successfully';
-    const category_name = 'ProductModel_test';
-    const category = await Category.create(category_name);
-    const category_id :number= Number(category[0].id);
-    const name = 'ProductModel_test';
-    const details = 'ProductModel details';
-    const price:number = 10;
-    const product = {
-        name,
-        details,
-        price,
-        category_id,
-    }
-    const created_product = await ProductModel.create(product);
-    const id :number = Number(created_product[0].id);
+    const id:number = Number(await ProductSeeder.id());
     const result = await ProductModel.delete(id);
     expect(result).toEqual(msg);
   });

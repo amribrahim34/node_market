@@ -35,7 +35,6 @@ class Category {
       const sql = 'INSERT INTO categories (name) VALUES($1) RETURNING *';
       const result = await con.query(sql, [n]);
       con.release();
-      console.log(result.rows[0].name);
       return result.rows;
     } catch (error) {
       throw new Error(`cannot get categories ${error}`);

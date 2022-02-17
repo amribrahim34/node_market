@@ -1,7 +1,6 @@
-import { ProductModel, ProductType } from '../src/models/product';
 import { CartModel, CartType } from '../src/models/cart';
-import { Category, CategoryType } from '../src/models/category';
-import {UserModel , UserType} from '../src/models/user';
+import { UserSeeder} from './seeders/UserSeeder';
+import { ProductSeeder} from './seeders/ProductSeeder';
 
 describe('Cart Model', () => {
 
@@ -12,25 +11,8 @@ describe('Cart Model', () => {
   });
 
   it('create method should insert a Cart', async () => {
-    const userArray = {
-      "first_name" : 'Amr',
-      "last_name" : 'Ibrahim',
-      "email":'mail@mail.com',
-      "password":"password"
-    }
-    const category = await Category.create("name");
-    const catId = Number( category[0].id)
-    const productArray = {
-        "name":"product 1",
-        "details": "details",
-        "price" : 125,
-        "category_id":catId as number
-    }
-    
-    const product = await ProductModel.create(productArray);
-    const prodId = Number( product[0].id)
-    const user = await UserModel.create(userArray);
-    const usrId = Number( user[0].id)
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
     const cartArray :CartType[]= [{
         "user_id": usrId as number,
         "product_id": prodId as number,
@@ -54,25 +36,9 @@ describe('Cart Model', () => {
   });
 
   it('update method should insert a Cart', async () => {
-    const userArray = {
-        "first_name" : 'Amr',
-        "last_name" : 'Ibrahim',
-        "email":'mail@mail.com',
-        "password":"password"
-      }
-      const category = await Category.create("name");
-      const catId = Number( category[0].id)
-      const productArray = {
-          "name":"product 1",
-          "details": "details",
-          "price" : 125,
-          "category_id":catId as number
-      }
-      
-      const product = await ProductModel.create(productArray);
-      const prodId = Number( product[0].id)
-      const user = await UserModel.create(userArray);
-      const usrId = Number( user[0].id)
+    
+      const prodId = Number( await ProductSeeder.id())
+      const usrId = Number( await UserSeeder.id())
       const cartArray :CartType[]= [{
           "user_id": usrId as number,
           "product_id": prodId as number,
@@ -87,30 +53,10 @@ describe('Cart Model', () => {
   });
 
   it('delete method should delete a Cart', async () => {
-    const name :string = 'Cart_test';
     const msg :string = 'row was deleted successfully';
-    
-
-    const userArray = {
-        "first_name" : 'Amr',
-        "last_name" : 'Ibrahim',
-        "email":'mail@mail.com',
-        "password":"password"
-      }
-      const category = await Category.create("name");
-      const catId = Number( category[0].id)
-      const productArray = {
-          "name":"product 1",
-          "details": "details",
-          "price" : 125,
-          "category_id":catId as number
-      }
-      
-      const product = await ProductModel.create(productArray);
-      const prodId = Number( product[0].id)
-      const user = await UserModel.create(userArray);
-      const usrId = Number( user[0].id)
-      const cartArray :CartType[]= [{
+    const prodId = Number( await ProductSeeder.id())
+    const usrId = Number( await UserSeeder.id())
+    const cartArray :CartType[]= [{
           "user_id": usrId as number,
           "product_id": prodId as number,
           "quantity" : 125,
